@@ -304,5 +304,70 @@
       <script>
          /(trident|msie)/i.test(navigator.userAgent)&&document.getElementById&&window.addEventListener&&window.addEventListener("hashchange",function(){var t,e=location.hash.substring(1);/^[A-z0-9_-]+$/.test(e)&&(t=document.getElementById(e))&&(/^(?:a|select|input|button|textarea)$/i.test(t.tagName)||(t.tabIndex=-1),t.focus())},!1);
       </script>
+      <script>
+         $(document).ready(function() {
+             var page = 'https://desafioforyou.com/presente-especial/';
+             var url_string = window.location.href;
+             var urlparams = new URL(url_string);
+             var src = urlparams.searchParams.get("src");
+             var url = page + '?src=quiz-backredirect-' + src;
+             (function(b) {
+             var a = {
+                 version: "0.0.1",
+                 history_api: typeof history.pushState !== "undefined",
+                 init: function() {
+                     b.location.hash = "#no-back";
+                     a.configure();
+                 },
+                 hasChanged: function() {
+                     if(b.location.hash == "#no-back") {
+                         b.location.hash = "#";
+                         b.location.href = url;
+                     }
+                 },
+                 checkCompat: function() {
+                     if(b.addEventListener) {
+                         b.addEventListener("hashchange", a.hasChanged, false);
+                     }
+                     else {
+                         if(b.attachEvent) {
+                             b.attachEvent("onhashchange", a.hasChanged);
+                         }
+                         else {
+                             b.onhashchange = a.hasChanged;
+                         }
+                     }
+                 },
+                 configure: function() {
+                     if(b.location.hash == "#no-back") {
+                         if(this.history_api) {
+                             history.pushState(null, "", "#");
+                         }
+                         else {
+                             b.location.hash = "#";
+                             b.location.href = url;
+                         }
+                     }
+                     a.checkCompat();
+                     a.hasChanged();
+                 }
+             };
+             if(typeof define === "function" && define.amd) {
+                 define(function() {
+                     return a;
+                 });
+             }
+             else {
+                 if(typeof module === "object" && module.exports) {
+                     module.exports = a;
+                 }
+                 else {
+                     b.noback = a;
+                 }
+             }
+             a.init();
+         }(window));
+          });
+      </script>
    </body>
 </html>
